@@ -29,5 +29,8 @@ public:
 	UInputAction* InputJump;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	UCurveFloat* TestCurve;
+	UInputAction* InputGrab;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UInputAction* InputRelease;
 };

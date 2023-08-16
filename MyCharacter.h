@@ -37,7 +37,7 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	//Handle interact input
-	void interact(const FInputActionValue& Value);
+	void grab(const FInputActionValue& Value);
 
 	void playNoise();
 
@@ -50,4 +50,8 @@ public:
 
 private:
 	class UCapsuleComponent* CapsuleComponent;
+
+	class UGrabber* GrabComponent;
+
+	void release();
 };

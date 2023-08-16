@@ -4,6 +4,7 @@
 #include "MyNoiseMaker.h"
 #include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
+#include "MyPhysicsProp.h"
 
 // Sets default values
 AMyNoiseMaker::AMyNoiseMaker()
@@ -24,7 +25,7 @@ AMyNoiseMaker::AMyNoiseMaker()
 void AMyNoiseMaker::BeginPlay()
 {
 	Super::BeginPlay();
-
+	stopNoise();
 }
 
 // Called every frame
@@ -32,8 +33,13 @@ void AMyNoiseMaker::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	float DamageDealt = detectThrownActor();
 	if (Active) {
-
+		Health -= DamageDealt;
+		if (Health <= 0) {
+			stopNoise();
+			Active = false;
+		}
 	}
 
 
@@ -48,17 +54,27 @@ void AMyNoiseMaker::stopNoise() {
 	AudioComponent->Stop();
 }
 
-void AMyNoiseMaker::detectThrownActor() const{
-	
+float AMyNoiseMaker::detectThrownActor(){
+		//temporary storage for actors
 		TArray<AActor*> Actors;
 		CollisionComponent->GetOverlappingActors(Actors);
 
 		for (AActor* Actor : Actors) {
-			if (Actor->ActorHasTag(TargetActorTag)) {
-				Actor->Tags.Remove(TargetActorTag);
-				Health -= Actor->Damage;
+			if (Actor && Actor->ActorHasTag(TargetActorTag)) {
+				
+				AMyPhysicsProp* DetectedActor = Cast<AMyPhysicsProp>(Actor);
+				if (DetectedActor) {
+					Actor->Tags.Remove(TargetActorTag);
+					return DetectedActor->Damage;
+				}
+
 			}
 		}
-		
+		return 0;
+}
 
+void AMyNoiseMaker::activate() {
+	Active = true;
+	Health = DefaultHealth;
+	playNoise();
 }

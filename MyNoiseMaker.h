@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	AMyNoiseMaker();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 	class UAudioComponent* AudioComponent;
 
 	UPROPERTY(VisibleAnywhere)
@@ -27,8 +27,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void stopNoise();
 
+	UFUNCTION(BlueprintCallable)
+	void activate();
+
 	UPROPERTY(EditDefaultsOnly, Category = "Default Parameters")
 	FName TargetActorTag = FName("Thrown");
+
+	UPROPERTY(EditAnywhere, Category = "Default Parameters")
+	int DefaultHealth = 10;
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,13 +46,13 @@ public:
 
 protected:
 
-	void detectThrownActor() const;
+	float detectThrownActor();
 
-	UPROPERTY(EditDefaultsOnly, Category = "Default Parameters")
-	int Health = 10;
+	bool Active = false;
 
-private:
-	bool Active;
+	int Health;
+
+	
 
 
 };

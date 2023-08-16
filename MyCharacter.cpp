@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "MyInputConfigData.h"
 #include "Camera/CameraComponent.h"
+#include "Grabber.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -21,6 +22,9 @@ AMyCharacter::AMyCharacter()
 	CapsuleComponent = Cast<UCapsuleComponent>(RootComponent);
 	PlayerCamera->SetupAttachment(CapsuleComponent);
 	PlayerCamera->bUsePawnControlRotation = true;
+
+	GrabComponent = CreateDefaultSubobject<UGrabber>(TEXT("GrabComponent"));
+	GrabComponent->SetupAttachment(PlayerCamera);
 }
 
 
@@ -56,9 +60,11 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	//Binding the actions
 	PEI->BindAction(InputActions->InputMove, ETriggerEvent::Triggered, this, &AMyCharacter::Move);
 	PEI->BindAction(InputActions->InputLook, ETriggerEvent::Triggered, this, &AMyCharacter::Look);
- 	PEI->BindAction(InputActions->InputInteract, ETriggerEvent::Triggered, this, &AMyCharacter::interact);
+ 	PEI->BindAction(InputActions->InputGrab, ETriggerEvent::Started, this, &AMyCharacter::grab);
+	PEI->BindAction(InputActions->InputGrab, ETriggerEvent::Completed, this, &AMyCharacter::release);
  	PEI->BindAction(InputActions->InputJump, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 	PEI->BindAction(InputActions->InputJump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+	PEI->BindAction(InputActions->InputRelease, ETriggerEvent::Triggered, GrabComponent, &UGrabber::Release);
 
 }
 
@@ -104,8 +110,12 @@ void AMyCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AMyCharacter::interact(const FInputActionValue& Value) {
+void AMyCharacter::grab(const FInputActionValue& Value) {
+	GrabComponent->Grab();
+}
 
+void AMyCharacter::release() {
+	GrabComponent->Throw();
 }
 
 void AMyCharacter::playNoise() {
