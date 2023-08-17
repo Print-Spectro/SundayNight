@@ -18,6 +18,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UAudioComponent* AudioComponent;
 
+
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* CollisionComponent;
 
@@ -36,6 +37,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Default Parameters")
 	int DefaultHealth = 10;
 
+	bool Active = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -48,7 +50,7 @@ protected:
 
 	float detectThrownActor();
 
-	bool Active = false;
+	
 
 	int Health;
 

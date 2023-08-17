@@ -2,6 +2,7 @@
 
 
 #include "Grabber.h"
+#include "MyPhysicsProp.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values for this component's properties
@@ -49,7 +50,7 @@ void UGrabber::Release() {
 		UE_LOG(LogTemp, Display, TEXT("Released"));
 		PhysicsHandle->GetGrabbedComponent()->WakeAllRigidBodies();
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->Tags.Remove("Grabbed");
-		
+		Cast<AMyPhysicsProp>(PhysicsHandle->GetGrabbedComponent()->GetOwner())->setPlayerCollision(1);
 		PhysicsHandle->ReleaseComponent();
 		
 	}
@@ -68,8 +69,10 @@ void UGrabber::Throw() {
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->Tags.Remove("Grabbed");
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->Tags.Add("Thrown");
 		AActor* Grabbed = PhysicsHandle->GetGrabbedComponent()->GetOwner();
+		Cast<AMyPhysicsProp>(Grabbed)->setPlayerCollision(1);
 		PhysicsHandle->ReleaseComponent();
 		Grabbed->FindComponentByClass<UStaticMeshComponent>()->AddImpulse(100000 * GetForwardVector());
+		
 	}
 
 }
@@ -86,6 +89,7 @@ void UGrabber::Grab() {
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 		HitComponent->WakeAllRigidBodies();
 		HitResult.GetActor()->Tags.Add("Grabbed");
+		Cast<AMyPhysicsProp>(HitResult.GetActor())->setPlayerCollision(0);
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			HitComponent,
 			NAME_None,

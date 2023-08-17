@@ -4,6 +4,7 @@
 #include "MyNoiseMaker.h"
 #include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
+#include "UObject/ConstructorHelpers.h"
 #include "MyPhysicsProp.h"
 
 // Sets default values
@@ -19,6 +20,10 @@ AMyNoiseMaker::AMyNoiseMaker()
 	AudioComponent->SetupAttachment(CollisionComponent);
 
 
+// 	static ConstructorHelpers::FObjectFinder<USoundCue> HitSoundCueObject(TEXT("/ Script / Engine.SoundCue'/Game/Sounds/HitSounds/HitSound.HitSound'"));
+// 	if (HitSoundCueObject.Succeeded()) {
+// 		HitSoundCue = HitSoundCueObject.Object;
+// 	}
 }
 
 // Called when the game starts or when spawned
@@ -26,6 +31,7 @@ void AMyNoiseMaker::BeginPlay()
 {
 	Super::BeginPlay();
 	stopNoise();
+
 }
 
 // Called every frame
@@ -65,6 +71,7 @@ float AMyNoiseMaker::detectThrownActor(){
 				AMyPhysicsProp* DetectedActor = Cast<AMyPhysicsProp>(Actor);
 				if (DetectedActor) {
 					Actor->Tags.Remove(TargetActorTag);
+					DetectedActor->PlayHitSound();
 					return DetectedActor->Damage;
 				}
 

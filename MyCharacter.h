@@ -16,6 +16,8 @@ public:
 	// Sets default values for this character's properties
 	AMyCharacter();
 
+	class AMyNoiseMaker* CurrentNoiseMaker;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,6 +43,14 @@ protected:
 
 	void playNoise();
 
+	UPROPERTY(BlueprintReadOnly);
+	int score = 0;
+
+	UPROPERTY(EditDefaultsOnly, meta = (ToolTip = "Grab distance in cm"))
+	float InteractDistance = 200;
+
+	
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -48,10 +58,42 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void increaseScore();
+
+	void startIncreaseScore();
+
+	UFUNCTION(BlueprintCallable)
+	void restartLevel();
+
+	void release();
+
+	void stopWalkSound();
+
 private:
 	class UCapsuleComponent* CapsuleComponent;
 
 	class UGrabber* GrabComponent;
 
-	void release();
+	
+
+	FTimerHandle NoiseTimer;
+
+	FTimerHandle ScoreTimer;
+
+	FTimerHandle WakeupTimer;
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	AActor* getInteractableLookingAt();
+
+	void interact();
+
+	void wakeUp();
+
+	UPROPERTY(EditDefaultsOnly)
+	class UAudioComponent* AudioComponent;
+
+
+	void walkSound();
+
 };
