@@ -15,6 +15,7 @@
 #include "Components/AudioComponent.h"
 #include "MyOutliner.h"
 #include "Components/CapsuleComponent.h"
+#include "MyPhysicsProp.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -41,7 +42,8 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	//Retrieving all the noise makers in the level
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyNoiseMaker::StaticClass(), FoundActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyNoiseMaker::StaticClass(), FoundNoiseMakers);
+	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyPhysicsProp::StaticClass(), FoundPhysicsProps);
 	playNoise();
 }
 
@@ -151,10 +153,10 @@ void AMyCharacter::release() {
 void AMyCharacter::playNoise() {
 	GetWorld()->GetTimerManager().SetTimer(NoiseTimer, this, &AMyCharacter::wakeUp, 1, false, 1);
 	GetWorld()->GetTimerManager().ClearTimer(ScoreTimer);
-	if (FoundActors.Num() > 0) {
-		int RandomIndex = FMath::RandRange(0, FoundActors.Num() - 1);
+	if (FoundNoiseMakers.Num() > 0) {
+		int RandomIndex = FMath::RandRange(0, FoundNoiseMakers.Num() - 1);
 
-		AMyNoiseMaker* RandomActor = Cast<AMyNoiseMaker>(FoundActors[RandomIndex]);
+		AMyNoiseMaker* RandomActor = Cast<AMyNoiseMaker>(FoundNoiseMakers[RandomIndex]);
 
 		if (RandomActor) {
 			RandomActor->activate();
@@ -222,3 +224,7 @@ void AMyCharacter::hoverOutlineInteractable(){
 	PreviousHovered = OutlineComponent;
 	//getInteractableLookingAt()->FindComponentByClass<UMyOutliner>()->setOutline(1);
 }
+
+// void TestOverride() {
+// 
+// }

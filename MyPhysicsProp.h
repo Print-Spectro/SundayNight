@@ -24,13 +24,20 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UAudioComponent* HitAudioComponent;
 
+	UPROPERTY(EditAnywhere)
+	class USoundBase* CollisionSound;
+
 	void PlayHitSound();
 
 	void setPlayerCollision(bool Collision) const;
 
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit);
 
 public:	
 	// Called every frame

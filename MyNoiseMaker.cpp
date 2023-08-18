@@ -30,6 +30,9 @@ AMyNoiseMaker::AMyNoiseMaker()
 void AMyNoiseMaker::BeginPlay()
 {
 	Super::BeginPlay();
+	
+
+
 	stopNoise();
 
 }
@@ -41,6 +44,7 @@ void AMyNoiseMaker::Tick(float DeltaTime)
 
 	float DamageDealt = detectThrownActor();
 	if (Active) {
+		//UE_LOG(LogTemp, Display, TEXT("Bass Intensity %f"), getBassIntensity());
 		Health -= DamageDealt;
 		if (Health <= 0) {
 			stopNoise();
@@ -48,17 +52,20 @@ void AMyNoiseMaker::Tick(float DeltaTime)
 		}
 	}
 
+	
 
 }
 
 void AMyNoiseMaker::playNoise() {
-	float RandomOffset = FMath::FRandRange(0, 3600);
+	float RandomOffset = FMath::FRandRange(0.f, 3600.f);
 	UE_LOG(LogTemp, Display, TEXT("Play Sound Offset: %f"), RandomOffset )
 	AudioComponent->Play(RandomOffset);
+	//Get spectrum data
 }
 
 void AMyNoiseMaker::stopNoise() {
 	AudioComponent->Stop();
+	
 }
 
 float AMyNoiseMaker::detectThrownActor(){
@@ -85,4 +92,26 @@ void AMyNoiseMaker::activate() {
 	Active = true;
 	Health = DefaultHealth;
 	playNoise();
+
+	
+}
+
+float AMyNoiseMaker::getBassIntensity() {
+	TArray<FSoundWaveSpectralData> AudioData;
+	TArray<float>FrequenciesToGet;
+	for (int i = 50; i < 300; i++) {
+ 		FrequenciesToGet.Add(i);
+	}
+	if (AudioComponent->GetCookedFFTData(FrequenciesToGet, AudioData)) {
+		float TotalMagnitude = 0;
+		for (FSoundWaveSpectralData i : AudioData) {
+			TotalMagnitude += i.Magnitude;
+		}
+		return TotalMagnitude;
+	}
+	else {
+		return 0.f;
+	}
+	//AudioComponent->GetCookedFFTData
+	
 }

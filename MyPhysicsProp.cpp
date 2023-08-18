@@ -2,6 +2,8 @@
 
 
 #include "MyPhysicsProp.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
 #include "Components/AudioComponent.h"
 
 // Sets default values
@@ -29,7 +31,7 @@ void AMyPhysicsProp::BeginPlay()
 void AMyPhysicsProp::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//NotifyHit(Mesh, AActor*,  );
+	
 }
 
 void AMyPhysicsProp::PlayHitSound() {
@@ -53,3 +55,24 @@ void AMyPhysicsProp::setPlayerCollision(bool Collision) const{
 	
 }
 
+void AMyPhysicsProp::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+{
+	Super::NotifyHit(MyComp = Mesh, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+
+	// Calculate collision speed
+	float CollisionSpeed = NormalImpulse.Size() / MyComp->GetMass(); // Adjust this calculation as needed
+
+	// Define the speed threshold above which the sound should play
+	float SpeedThreshold = 1.0f; // Adjust this value as needed
+
+	// Check if collision speed is above the threshold
+	if (NormalImpulse.Size() > SpeedThreshold)
+	{
+		// Play the sound here
+		if (CollisionSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, CollisionSound, HitLocation);
+			HitAudioComponent->Play();
+		}
+	}
+}

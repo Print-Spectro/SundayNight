@@ -52,7 +52,7 @@ protected:
 	//stores previously hovered outline compoent so that the outline can be switched off
 	class UMyOutliner* PreviousHovered;
 
-	TArray<AActor*> FoundActors;
+	TArray<AActor*> FoundNoiseMakers;
 
 	void hoverOutlineInteractable();
 public:	
@@ -100,4 +100,6 @@ protected:
 
 	void walkSound();
 
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	//void TestOverride();
 };
