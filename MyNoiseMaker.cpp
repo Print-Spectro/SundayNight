@@ -52,7 +52,8 @@ void AMyNoiseMaker::Tick(float DeltaTime)
 }
 
 void AMyNoiseMaker::playNoise() {
-	float RandomOffset = FMath::FRandRange(0, AudioComponent->GetSound()->GetDuration());
+	float RandomOffset = FMath::FRandRange(0, 3600);
+	UE_LOG(LogTemp, Display, TEXT("Play Sound Offset: %f"), RandomOffset )
 	AudioComponent->Play(RandomOffset);
 }
 

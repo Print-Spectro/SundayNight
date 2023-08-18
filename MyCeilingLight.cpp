@@ -21,7 +21,7 @@ AMyCeilingLight::AMyCeilingLight()
 void AMyCeilingLight::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Light->SetVisibility(LightState);
 }
 
 // Called every frame

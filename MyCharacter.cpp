@@ -13,6 +13,7 @@
 #include "MyNoiseMaker.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
+#include "MyOutliner.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -39,6 +40,8 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	//Retrieving all the noise makers in the level
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyNoiseMaker::StaticClass(), FoundActors);
 	playNoise();
 }
 
@@ -47,14 +50,17 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//When the noise stops, wait then play noise at a random noise maker
 	if (CurrentNoiseMaker != nullptr && !CurrentNoiseMaker->Active) {
 		if (!GetWorld()->GetTimerManager().IsTimerActive(NoiseTimer))
 		{
 			GetWorld()->GetTimerManager().SetTimer(NoiseTimer, this, &AMyCharacter::playNoise, 5, false, 5);
-			
-			
 		}
 	}
+
+	//Set render custom depth to outline while hovering, if hover target changes, turn off outline
+	hoverOutlineInteractable();
+
 }
 
 // Called to bind functionality to input
@@ -143,8 +149,6 @@ void AMyCharacter::release() {
 }
 
 void AMyCharacter::playNoise() {
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyNoiseMaker::StaticClass(), FoundActors);
 	GetWorld()->GetTimerManager().SetTimer(NoiseTimer, this, &AMyCharacter::wakeUp, 1, false, 1);
 	GetWorld()->GetTimerManager().ClearTimer(ScoreTimer);
 	if (FoundActors.Num() > 0) {
@@ -194,3 +198,27 @@ void AMyCharacter::restartLevel() {
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
 
+void AMyCharacter::hoverOutlineInteractable(){
+	AActor* LookingAt = getInteractableLookingAt();
+	if (LookingAt == nullptr) {
+		if (PreviousHovered != nullptr) {
+			PreviousHovered->setOutline(0); //No hovered means hovering ended: turn off outline
+		}
+		return;
+	}
+	UMyOutliner* OutlineComponent = LookingAt->FindComponentByClass<UMyOutliner>();
+	if (OutlineComponent == nullptr) {
+			return;
+			UE_LOG(LogTemp, Warning, TEXT("Interactable actor has no outline component"))
+	}
+	if (PreviousHovered == OutlineComponent) {
+		OutlineComponent->setOutline(1);
+	}
+	if (PreviousHovered != OutlineComponent){ //this statement handles the case of two overlapping hoverables.
+		if (PreviousHovered != nullptr) {
+			PreviousHovered->setOutline(0); 
+		}
+	}
+	PreviousHovered = OutlineComponent;
+	//getInteractableLookingAt()->FindComponentByClass<UMyOutliner>()->setOutline(1);
+}

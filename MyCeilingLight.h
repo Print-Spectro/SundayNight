@@ -32,5 +32,6 @@ public:
 
 	void toggleLight();
 
+	UPROPERTY(EditAnywhere)
 	bool LightState = 1;
 };

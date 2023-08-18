@@ -49,8 +49,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, meta = (ToolTip = "Grab distance in cm"))
 	float InteractDistance = 200;
 
-	
+	//stores previously hovered outline compoent so that the outline can be switched off
+	class UMyOutliner* PreviousHovered;
 
+	TArray<AActor*> FoundActors;
+
+	void hoverOutlineInteractable();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -3,6 +3,7 @@
 
 #include "MyLightSwitch.h"
 #include "Kismet/GameplayStatics.h"
+#include "MyOutliner.h"
 #include "Components/AudioComponent.h"
 
 // Sets default values
@@ -16,6 +17,8 @@ AMyLightSwitch::AMyLightSwitch()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
 	AudioComponent->SetupAttachment(Mesh);
+
+	OutlineComponent = CreateDefaultSubobject<UMyOutliner>(TEXT("OutlineComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -23,15 +26,19 @@ void AMyLightSwitch::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Creating an array of MyCeilingLight pointers to allow toggling 
 	TArray<AActor*> OutLightActors;
 	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), AMyCeilingLight::StaticClass(), TargetActorTag, OutLightActors);
 	for (AActor* i : OutLightActors) {
 		FoundLights.Add(Cast<AMyCeilingLight>(i));
 	}
 	if (OutLightActors.Num() == 0){
+		//Warning helps debug if your tags don't match. 
 		UE_LOG(LogTemp, Warning, TEXT("No Lights Actors Found"));
 	}
 	AudioComponent->Stop();
+
+	OutlineComponent->setOutline(0);
 }
 
 // Called every frame
@@ -43,6 +50,8 @@ void AMyLightSwitch::Tick(float DeltaTime)
 
 
 void AMyLightSwitch::toggleSwitch() {
+	//Plays switch sound, rotates 180 degrees to give the impression of flipping the switch
+	//triggers the toggeLight function of all lights found with the corresponding tag
 	if (AudioComponent->Sound != nullptr) {
 		AudioComponent->Play();
 	}

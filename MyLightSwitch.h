@@ -34,6 +34,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void toggleSwitch();
 
+	class UMyOutliner* OutlineComponent;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
