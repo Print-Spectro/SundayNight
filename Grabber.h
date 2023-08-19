@@ -50,4 +50,10 @@ private:
 	UFUNCTION(BlueprintCallable)
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
 
+	UPROPERTY(EditDefaultsOnly)
+	float MaximumThrowVelocity = 5000;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ThrowImpulse = 100000;
+
 };

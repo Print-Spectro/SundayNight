@@ -71,7 +71,13 @@ void UGrabber::Throw() {
 		AActor* Grabbed = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		Cast<AMyPhysicsProp>(Grabbed)->setPlayerCollision(1);
 		PhysicsHandle->ReleaseComponent();
-		Grabbed->FindComponentByClass<UStaticMeshComponent>()->AddImpulse(100000 * GetForwardVector());
+		UStaticMeshComponent* GrabbedComponent = Grabbed->FindComponentByClass<UStaticMeshComponent>();
+		if (ThrowImpulse / GrabbedComponent->GetMass() > MaximumThrowVelocity) {
+			GrabbedComponent->AddImpulse(MaximumThrowVelocity * GetForwardVector(), TEXT("Root"), true);
+		}
+		else {
+			GrabbedComponent->AddImpulse(ThrowImpulse * GetForwardVector());
+		}
 		
 	}
 

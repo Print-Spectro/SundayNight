@@ -21,7 +21,8 @@ AMyDoor::AMyDoor()
 void AMyDoor::BeginPlay()
 {
 	Super::BeginPlay();
-	SetActorRotation(FRotator(0, 0, 90) * OpenState);
+	InitialRotation = GetActorRotation();
+	SetActorRotation(InitialRotation + FRotator(0, 90, 0) * OpenState);
 
 }
 
@@ -49,7 +50,7 @@ int AMyDoor::getOpenDirection() {
 
 void AMyDoor::toggleOpen(int Direction) {
 	OpenState = !OpenState;
-	SetActorRelativeRotation(FRotator(0,90,0)*OpenState*Direction);
+	SetActorRotation(InitialRotation + FRotator(0,90,0)*OpenState*Direction);
 	if (OpenSound) {
 		UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
 	}

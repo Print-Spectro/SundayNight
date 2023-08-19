@@ -33,6 +33,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class USoundBase* OpenSound;
 
+	FRotator InitialRotation;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
