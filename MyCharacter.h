@@ -102,4 +102,7 @@ protected:
 
 	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	//void TestOverride();
+
+	UPROPERTY(EditDefaultsOnly)
+	float NoiseDelay = 10;
 };

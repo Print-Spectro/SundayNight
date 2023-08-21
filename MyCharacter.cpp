@@ -56,7 +56,7 @@ void AMyCharacter::Tick(float DeltaTime)
 	if (CurrentNoiseMaker != nullptr && !CurrentNoiseMaker->Active) {
 		if (!GetWorld()->GetTimerManager().IsTimerActive(NoiseTimer))
 		{
-			GetWorld()->GetTimerManager().SetTimer(NoiseTimer, this, &AMyCharacter::playNoise, 5, false, 5);
+			GetWorld()->GetTimerManager().SetTimer(NoiseTimer, this, &AMyCharacter::playNoise, NoiseDelay, false, NoiseDelay);
 		}
 	}
 
