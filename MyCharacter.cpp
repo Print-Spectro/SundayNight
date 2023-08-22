@@ -232,9 +232,7 @@ void AMyCharacter::hoverOutlineInteractable(){
 			PreviousHovered->setOutline(0); 
 		}
 	}
-
 	PreviousHovered = OutlineComponent;
-	
 }
 
 

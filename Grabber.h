@@ -22,7 +22,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Grab();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void Throw();
 
 protected:
