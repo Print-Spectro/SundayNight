@@ -125,6 +125,7 @@ void AMyCharacter::Move(const FInputActionValue& Value)
 }
 
 void AMyCharacter::walkSound() {
+	//Very simple walking sound functionality
 	AudioComponent->Play();
 }
 void AMyCharacter::stopWalkSound() {
@@ -132,6 +133,7 @@ void AMyCharacter::stopWalkSound() {
 }
 
 void AMyCharacter::Look(const FInputActionValue& Value)
+	//Axes 2D input action bound to controller input
 {
 	FVector2D LookValue = Value.Get<FVector2D>();
 
@@ -143,14 +145,17 @@ void AMyCharacter::Look(const FInputActionValue& Value)
 }
 
 void AMyCharacter::grab(const FInputActionValue& Value) {
+	//See Grabber component
 	GrabComponent->Grab();
 }
 
 void AMyCharacter::release() {
+	//See Grabber component
 	GrabComponent->Throw();
 }
 
 void AMyCharacter::playNoise() {
+	//Randomly chooses a noise maker in the world to play a noise
 	GetWorld()->GetTimerManager().SetTimer(NoiseTimer, this, &AMyCharacter::wakeUp, 1, false, 1);
 	GetWorld()->GetTimerManager().ClearTimer(ScoreTimer);
 	if (FoundNoiseMakers.Num() > 0) {
@@ -170,12 +175,14 @@ void AMyCharacter::increaseScore(){
 }
 
 void AMyCharacter::startIncreaseScore() {
+	//Increments score using increaseScore function bound to a timer
 	if (!GetWorld()->GetTimerManager().IsTimerActive(ScoreTimer)) {
 		GetWorld()->GetTimerManager().SetTimer(ScoreTimer, this, &AMyCharacter::increaseScore, 1, true, 0);
 	}
 }
 
 AActor* AMyCharacter::getInteractableLookingAt() {
+	//Returns pointer to actors in the interactable trace channel
 	ECC_GameTraceChannel2;
 	FHitResult HitResult;
 	FVector Start = PlayerCamera->GetComponentLocation();
@@ -187,20 +194,23 @@ AActor* AMyCharacter::getInteractableLookingAt() {
 }
 
 void AMyCharacter::wakeUp() {
+	//Player possesses character in order to "wake up" from the possessed bed actor
 	if (UGameplayStatics::GetPlayerPawn(GetWorld(), 0) != this) {
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(this);
 	}
 }
 
 void AMyCharacter::interact() {
-
+	//Bound in blueprints using an interface
 }
 
 void AMyCharacter::restartLevel() {
+	//Opens current level 
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
 
 void AMyCharacter::hoverOutlineInteractable(){
+	//Turns on render custom depth when looking at an intractable actor, enabling outline post process materials. 
 	AActor* LookingAt = getInteractableLookingAt();
 	if (LookingAt == nullptr) {
 		if (PreviousHovered != nullptr) {
@@ -216,15 +226,15 @@ void AMyCharacter::hoverOutlineInteractable(){
 	if (PreviousHovered == OutlineComponent) {
 		OutlineComponent->setOutline(1);
 	}
-	if (PreviousHovered != OutlineComponent){ //this statement handles the case of two overlapping hoverables.
+	if (PreviousHovered != OutlineComponent){ 
+		//this statement handles the case of moving between two overlapping interactables.
 		if (PreviousHovered != nullptr) {
 			PreviousHovered->setOutline(0); 
 		}
 	}
+
 	PreviousHovered = OutlineComponent;
-	//getInteractableLookingAt()->FindComponentByClass<UMyOutliner>()->setOutline(1);
+	
 }
 
-// void TestOverride() {
-// 
-// }
+

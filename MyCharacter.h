@@ -104,5 +104,5 @@ protected:
 	//void TestOverride();
 
 	UPROPERTY(EditDefaultsOnly)
-	float NoiseDelay = 10;
+	float NoiseDelay = 6;
 };
