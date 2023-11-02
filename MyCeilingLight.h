@@ -32,6 +32,6 @@ public:
 
 	void toggleLight();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, category = "defaults")
 	bool LightState = 1;
 };

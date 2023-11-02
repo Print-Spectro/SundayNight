@@ -19,7 +19,6 @@ AMyNoiseMaker::AMyNoiseMaker()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
 	AudioComponent->SetupAttachment(CollisionComponent);
 
-
 // 	static ConstructorHelpers::FObjectFinder<USoundCue> HitSoundCueObject(TEXT("/ Script / Engine.SoundCue'/Game/Sounds/HitSounds/HitSound.HitSound'"));
 // 	if (HitSoundCueObject.Succeeded()) {
 // 		HitSoundCue = HitSoundCueObject.Object;
@@ -30,18 +29,14 @@ AMyNoiseMaker::AMyNoiseMaker()
 void AMyNoiseMaker::BeginPlay()
 {
 	Super::BeginPlay();
-	
-
-
 	stopNoise();
-
 }
 
 // Called every frame
+//Could override on begin overlap instead
 void AMyNoiseMaker::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	float DamageDealt = detectThrownActor();
 	if (Active) {
 		//UE_LOG(LogTemp, Display, TEXT("Bass Intensity %f"), getBassIntensity());
@@ -51,9 +46,6 @@ void AMyNoiseMaker::Tick(float DeltaTime)
 			Active = false;
 		}
 	}
-
-	
-
 }
 
 void AMyNoiseMaker::playNoise() {
@@ -65,14 +57,12 @@ void AMyNoiseMaker::playNoise() {
 
 void AMyNoiseMaker::stopNoise() {
 	AudioComponent->Stop();
-	
 }
 
 float AMyNoiseMaker::detectThrownActor(){
 		//temporary storage for actors
 		TArray<AActor*> Actors;
 		CollisionComponent->GetOverlappingActors(Actors);
-
 		for (AActor* Actor : Actors) {
 			if (Actor && Actor->ActorHasTag(TargetActorTag)) {
 				
@@ -82,7 +72,6 @@ float AMyNoiseMaker::detectThrownActor(){
 					DetectedActor->PlayHitSound();
 					return DetectedActor->Damage;
 				}
-
 			}
 		}
 		return 0;
@@ -92,10 +81,9 @@ void AMyNoiseMaker::activate() {
 	Active = true;
 	Health = DefaultHealth;
 	playNoise();
-
-	
 }
 
+//depricated
 float AMyNoiseMaker::getBassIntensity() {
 	TArray<FSoundWaveSpectralData> AudioData;
 	TArray<float>FrequenciesToGet;
@@ -113,5 +101,4 @@ float AMyNoiseMaker::getBassIntensity() {
 		return 0.f;
 	}
 	//AudioComponent->GetCookedFFTData
-	
 }

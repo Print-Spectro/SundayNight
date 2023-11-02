@@ -36,7 +36,6 @@ AMyCharacter::AMyCharacter()
 	AudioComponent->SetupAttachment(CapsuleComponent);
 }
 
-
 // Called when the game starts or when spawned
 void AMyCharacter::BeginPlay()
 {
@@ -51,7 +50,6 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	//When the noise stops, wait then play noise at a random noise maker
 	if (CurrentNoiseMaker != nullptr && !CurrentNoiseMaker->Active) {
 		if (!GetWorld()->GetTimerManager().IsTimerActive(NoiseTimer))
@@ -59,10 +57,8 @@ void AMyCharacter::Tick(float DeltaTime)
 			GetWorld()->GetTimerManager().SetTimer(NoiseTimer, this, &AMyCharacter::playNoise, NoiseDelay, false, NoiseDelay);
 		}
 	}
-
 	//Set render custom depth to outline while hovering, if hover target changes, turn off outline
 	hoverOutlineInteractable();
-
 }
 
 // Called to bind functionality to input
@@ -103,31 +99,21 @@ void AMyCharacter::Move(const FInputActionValue& Value)
 		//Forward/Backward direction
 		if (MoveValue.Y != 0.f || MoveValue.X != 0.f)
 		{
-			
 			//Get forward vector
 			const FVector ForwardDirection = MovementRotation.RotateVector(FVector::ForwardVector);
-
 			AddMovementInput(ForwardDirection, MoveValue.Y);
-
-
-		//Right.Feft direction
-
 			//Get right vector
 			const FVector SideDirection = MovementRotation.RotateVector(FVector::RightVector);
 
 			AddMovementInput(SideDirection, MoveValue.X);
-
-			//SetActorRotation(MovementRotation + FRotator(0,0, 0));
-
 		}
-
 	}
 }
-
+//Very simple walking sound functionality
 void AMyCharacter::walkSound() {
-	//Very simple walking sound functionality
 	AudioComponent->Play();
 }
+
 void AMyCharacter::stopWalkSound() {
 	AudioComponent->Stop();
 }
@@ -160,9 +146,7 @@ void AMyCharacter::playNoise() {
 	GetWorld()->GetTimerManager().ClearTimer(ScoreTimer);
 	if (FoundNoiseMakers.Num() > 0) {
 		int RandomIndex = FMath::RandRange(0, FoundNoiseMakers.Num() - 1);
-
 		AMyNoiseMaker* RandomActor = Cast<AMyNoiseMaker>(FoundNoiseMakers[RandomIndex]);
-
 		if (RandomActor) {
 			RandomActor->activate();
 			CurrentNoiseMaker = RandomActor;
@@ -190,7 +174,6 @@ AActor* AMyCharacter::getInteractableLookingAt() {
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(20);
 	GetWorld()->SweepSingleByChannel(HitResult, Start, End, FQuat::Identity, ECC_GameTraceChannel2, Sphere);
 	return HitResult.GetActor();
-	
 }
 
 void AMyCharacter::wakeUp() {

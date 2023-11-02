@@ -18,15 +18,31 @@ public:
 
 	class AMyNoiseMaker* CurrentNoiseMaker;
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void increaseScore();
+
+	void startIncreaseScore();
+
+	UFUNCTION(BlueprintCallable)
+	void restartLevel();
+
+	void release();
+
+	void stopWalkSound();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	class UInputMappingContext* InputMapping;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	class UMyInputConfigData* InputActions;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
@@ -46,7 +62,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly);
 	int score = 0;
 
-	UPROPERTY(EditDefaultsOnly, meta = (ToolTip = "Grab distance in cm"))
+	UPROPERTY(EditDefaultsOnly, meta = (ToolTip = "Grab distance in cm"), category = "Game Parameters")
 	float InteractDistance = 200;
 
 	//stores previously hovered outline compoent so that the outline can be switched off
@@ -55,38 +71,7 @@ protected:
 	TArray<AActor*> FoundNoiseMakers;
 
 	void hoverOutlineInteractable();
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void increaseScore();
-
-	void startIncreaseScore();
-
-	UFUNCTION(BlueprintCallable)
-	void restartLevel();
-
-	void release();
-
-	void stopWalkSound();
-
-private:
-	class UCapsuleComponent* CapsuleComponent;
-
-	class UGrabber* GrabComponent;
-
-	
-
-	FTimerHandle NoiseTimer;
-
-	FTimerHandle ScoreTimer;
-
-	FTimerHandle WakeupTimer;
-
-protected:
 	UFUNCTION(BlueprintCallable)
 	AActor* getInteractableLookingAt();
 
@@ -97,12 +82,20 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class UAudioComponent* AudioComponent;
 
-
 	void walkSound();
 
-	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	//void TestOverride();
+	UPROPERTY(EditDefaultsOnly, meta = (ToolTip = "Delay between noise in s"), category = "Game Parameters")
+	float NoiseDelay = 7;
 
-	UPROPERTY(EditDefaultsOnly)
-	float NoiseDelay = 6;
+private:
+	class UCapsuleComponent* CapsuleComponent;
+
+	class UGrabber* GrabComponent;
+
+	UPROPERTY()
+	FTimerHandle NoiseTimer;
+
+	FTimerHandle ScoreTimer;
+
+	FTimerHandle WakeupTimer;
 };

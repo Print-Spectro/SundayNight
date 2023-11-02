@@ -25,7 +25,6 @@ AMyLightSwitch::AMyLightSwitch()
 void AMyLightSwitch::BeginPlay()
 {
 	Super::BeginPlay();
-
 	//Creating an array of MyCeilingLight pointers to allow toggling 
 	TArray<AActor*> OutLightActors;
 	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), AMyCeilingLight::StaticClass(), TargetActorTag, OutLightActors);
@@ -37,7 +36,6 @@ void AMyLightSwitch::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("No Lights Actors Found"));
 	}
 	AudioComponent->Stop();
-
 	OutlineComponent->setOutline(0);
 }
 
@@ -46,8 +44,6 @@ void AMyLightSwitch::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
-
 
 void AMyLightSwitch::toggleSwitch() {
 	//Plays switch sound, rotates 180 degrees to give the impression of flipping the switch
@@ -64,5 +60,4 @@ void AMyLightSwitch::toggleSwitch() {
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("No Lights Found"));
 	}
-
 }

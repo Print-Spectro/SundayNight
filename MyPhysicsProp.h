@@ -15,7 +15,10 @@ public:
 	// Sets default values for this actor's properties
 	AMyPhysicsProp();
 
-	UPROPERTY(EditAnywhere);
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	class UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere);
@@ -31,17 +34,9 @@ public:
 
 	void setPlayerCollision(bool Collision) const;
 
-
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit);
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-
 };

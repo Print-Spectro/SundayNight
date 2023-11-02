@@ -15,9 +15,11 @@ public:
 	// Sets default values for this actor's properties
 	AMyNoiseMaker();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY(EditAnywhere)
 	class UAudioComponent* AudioComponent;
-
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* CollisionComponent;
@@ -44,19 +46,7 @@ protected:
 
 	float getBassIntensity();
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-protected:
-
 	float detectThrownActor();
 
-	
-
 	int Health;
-
-	
-
-
 };

@@ -15,6 +15,9 @@ public:
 	// Sets default values for this actor's properties
 	AMyDoor();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,15 +31,11 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void toggleOpen(int Direction);
 
+	UPROPERTY(EditAnywhere, Category = "Door Defaults")
 	bool OpenState = 0;
 
 	UPROPERTY(EditAnywhere)
 	class USoundBase* OpenSound;
 
 	FRotator InitialRotation;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 };

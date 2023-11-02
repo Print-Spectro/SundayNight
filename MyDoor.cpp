@@ -16,21 +16,18 @@ AMyDoor::AMyDoor()
 	RootComponent = Mesh;
 }
 
-
 // Called when the game starts or when spawned
 void AMyDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	InitialRotation = GetActorRotation();
 	SetActorRotation(InitialRotation + FRotator(0, 90, 0) * OpenState);
-
 }
 
 // Called every frame
 void AMyDoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 }
 
 int AMyDoor::getOpenDirection() {
@@ -38,10 +35,8 @@ int AMyDoor::getOpenDirection() {
 	FQuat MeshAngle = Mesh->GetComponentQuat();
 	AActor* Player = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	FVector RelativeLookingAt = UKismetMathLibrary::Quat_RotateVector(MeshAngle.Inverse(), Player->GetActorLocation() - Mesh->GetComponentLocation());
-
 	if (RelativeLookingAt.Y > 0) {
 		return 1;
-
 	}
 	else {
 		return -1;
@@ -54,5 +49,4 @@ void AMyDoor::toggleOpen(int Direction) {
 	if (OpenSound) {
 		UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
 	}
-
 }

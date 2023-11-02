@@ -25,17 +25,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Throw();
 
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, category = "")
 	float MaxGrabDistance = 180;
 
 	UPROPERTY(EditAnywhere)
@@ -55,5 +53,4 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float ThrowImpulse = 100000;
-
 };

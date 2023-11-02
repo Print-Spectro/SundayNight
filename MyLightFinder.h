@@ -16,20 +16,16 @@ class SUNDAYNIGHT_API UMyLightFinder : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UMyLightFinder();
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	TArray<AMyCeilingLight*> findLights();
+
+	FName TargetActorTag = TEXT("Bedroom");
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	TArray<AMyCeilingLight*> FoundLights;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-	
-	
-	TArray<AMyCeilingLight*> findLights();
-
-	FName TargetActorTag = TEXT("Bedroom");
 };

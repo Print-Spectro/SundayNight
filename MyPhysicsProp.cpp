@@ -10,11 +10,10 @@
 AMyPhysicsProp::AMyPhysicsProp()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
-
 
 	HitAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("HitAudioComponent"));
 	HitAudioComponent->SetupAttachment(Mesh);
@@ -31,7 +30,6 @@ void AMyPhysicsProp::BeginPlay()
 void AMyPhysicsProp::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 }
 
 void AMyPhysicsProp::PlayHitSound() {
@@ -51,28 +49,23 @@ void AMyPhysicsProp::setPlayerCollision(bool Collision) const{
 	else {
 		UE_LOG(LogTemp, Display, TEXT("setPlayerCollisionRequiresBool"));
 	}
-
-	
 }
 
 void AMyPhysicsProp::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::NotifyHit(MyComp = Mesh, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
-
 	// Calculate collision speed
 	float CollisionSpeed = NormalImpulse.Size() / MyComp->GetMass(); // Adjust this calculation as needed
-
-	// Define the speed threshold above which the sound should play
-	float SpeedThreshold = 1.0f; // Adjust this value as needed
-
-	// Check if collision speed is above the threshold
+	// Defining the speed threshold above which the sound should play
+	float SpeedThreshold = 10000.f;
+	// Checking if collision speed is above the threshold
 	if (NormalImpulse.Size() > SpeedThreshold)
 	{
-		// Play the sound here
 		if (CollisionSound)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, CollisionSound, HitLocation);
-			HitAudioComponent->Play();
+			if (!HitAudioComponent->IsActive()) {
+				HitAudioComponent->Play();
+			}
 		}
 	}
 }

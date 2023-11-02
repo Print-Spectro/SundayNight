@@ -1,6 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "MyBed.h"
 #include "MyCharacter.h"
 #include "Kismet/GameplayStatics.h"
@@ -8,6 +6,12 @@
 #include "MyNoiseMaker.h"
 #include "MyLightFinder.h"
 #include "Components/SceneComponent.h"
+
+//widgets
+#include "Components/Widget.h"
+#include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+
 
 // Sets default values
 AMyBed::AMyBed()
@@ -31,7 +35,6 @@ AMyBed::AMyBed()
 void AMyBed::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -49,13 +52,32 @@ void AMyBed::increaseSleep(){
 
 void AMyBed::sleep() {
 	if (Player != nullptr) {
-		//Sleeping is only possible if the current noise maker is inactive and the light is off
-		if (Player->CurrentNoiseMaker != nullptr && !Player->CurrentNoiseMaker->Active && !LightFinder->findLights()[0]->LightState) {
+		// Sleeping is only possible if the current noise maker is inactive and
+		// the light is off
+		if (Player->CurrentNoiseMaker != nullptr &&
+			!Player->CurrentNoiseMaker->Active &&
+			!LightFinder->findLights()[0]->LightState) {
 			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(this);
-			//Set player sleeping state
+			// Set player sleeping state
 			Player->startIncreaseScore();
 			Player->release();
 			Player->stopWalkSound();
+		}
+		else if (Player->CurrentNoiseMaker->Active) {
+			if (TooNoisyPrompt == nullptr) {
+				return;
+				UE_LOG(LogTemp, Warning, TEXT("AMyBed::sleep: No TooNoisyPrompt selected"));
+			}
+			UUserWidget* PromptInstance = CreateWidget<UUserWidget>(GetWorld(), TooNoisyPrompt);
+			PromptInstance->AddToViewport();
+		}
+		else if (LightFinder->findLights()[0]->LightState) {
+			if (LightOnPrompt == nullptr) {
+				UE_LOG(LogTemp, Warning, TEXT("AMyBed::sleep: No LightOnPrompt Selected"));
+				return;
+			}
+			UUserWidget* LightOnPromptInstance = CreateWidget<UUserWidget>(GetWorld(), LightOnPrompt);
+			LightOnPromptInstance->AddToViewport();
 		}
 	}
 }

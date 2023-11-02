@@ -16,6 +16,8 @@ public:
 	// Sets default values for this actor's properties
 	AMyLightSwitch();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,14 +37,5 @@ protected:
 	void toggleSwitch();
 
 	class UMyOutliner* OutlineComponent;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-
-
-
-	
 };
 

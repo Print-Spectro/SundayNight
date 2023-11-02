@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "MyBed.generated.h"
 
+class UUserWidget;
+
 UCLASS()
 class SUNDAYNIGHT_API AMyBed : public APawn
 {
@@ -21,7 +23,6 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class USceneComponent* SleepPosition;
 
-
 	UPROPERTY(EditDefaultsOnly)
 	class UCameraComponent* Camera;
 
@@ -32,21 +33,21 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> LightOnPrompt;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> TooNoisyPrompt;
+
+	UFUNCTION(BlueprintCallable)
+	void increaseSleep();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-protected:
-	UFUNCTION(BlueprintCallable)
-	void increaseSleep();
 
 private:
 	class AMyCharacter* Player;
 
 	class UMyLightFinder* LightFinder;
-
-	
-
-	
-
 };

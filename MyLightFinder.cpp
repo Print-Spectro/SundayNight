@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Finds all lights with a specific tag
 
 
 #include "MyLightFinder.h"
@@ -7,11 +7,7 @@
 // Sets default values for this component's properties
 UMyLightFinder::UMyLightFinder()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 
@@ -28,7 +24,6 @@ void UMyLightFinder::BeginPlay()
 	if (OutLightActors.Num() == 0) {
 		UE_LOG(LogTemp, Warning, TEXT("No Lights Actors Found"));
 	}
-	
 }
 
 
@@ -36,8 +31,6 @@ void UMyLightFinder::BeginPlay()
 void UMyLightFinder::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 TArray<AMyCeilingLight*> UMyLightFinder::findLights() {
